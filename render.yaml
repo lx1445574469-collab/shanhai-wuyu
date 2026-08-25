@@ -1,0 +1,11 @@
+# Render 蓝图：在 Render Dashboard → New → Blueprint 导入仓库时自动识别
+services:
+  - type: web
+    name: shanhai-wuyu
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false # 在面板里手动填写，不进仓库
