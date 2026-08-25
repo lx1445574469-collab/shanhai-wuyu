@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>山海问道</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 底层：宣纸肌理由山水背景自身呈现，此处仅叠加极淡纹理 -->
+  <div class="bg-paper" aria-hidden="true"></div>
+  <!-- 底层：完整水墨山水实景 -->
+  <div class="bg-image-layer" aria-hidden="true"></div>
+  <!-- 底层：缓缓飘动的水墨云气 -->
+  <div class="bg-clouds" aria-hidden="true">
+    <div class="cloud-layer layer-a"><img src="assets/elements/cloud.png" alt=""/></div>
+    <div class="cloud-layer layer-b"><img src="assets/elements/cloud.png" alt=""/></div>
+    <div class="cloud-layer layer-c"><img src="assets/elements/cloud.png" alt=""/></div>
+  </div>
+  <!-- 中层：水墨粒子 -->
+  <canvas class="ink-particles" id="ink-particles" aria-hidden="true"></canvas>
+
+  <!-- 顶层遮挡：水墨浮云幕帘，加载后向两侧散开 -->
+  <div class="cloud-curtain curtain-left" id="curtain-left" aria-hidden="true"></div>
+  <div class="cloud-curtain curtain-right" id="curtain-right" aria-hidden="true"></div>
+
+  <div id="app">
+    <header class="top-bar" id="top-bar" style="display:none;">
+      <div class="level-pill" id="level-pill">山海问道</div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="badges-mini" id="badges-mini"></div>
+    </header>
+
+    <!-- 关卡地图主页（竖版山水场景） -->
+    <section class="map-screen" id="map-screen">
+      <div class="map-header">
+        <h1 class="map-title"><img src="assets/title.png" alt="山海问道"/></h1>
+        <p class="map-subtitle">游线即叙事线</p>
+      </div>
+
+      <div class="map-scene" id="map-scene">
+        <svg class="map-svg" id="map-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path class="map-path-dim" id="map-path-dim" d="" />
+          <path class="map-path-lit" id="map-path-lit" d="" />
+        </svg>
+        <div class="map-cranes" id="map-cranes" aria-hidden="true">
+          <svg class="crane c1" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
+            <g class="crane-g">
+              <path class="wing wing-back" d="M110 60 C80 25 35 22 4 48 C42 42 78 54 110 64 Z" fill="#3a322b"/>
+              <path class="wing wing-front" d="M110 62 C140 27 185 24 216 50 C178 44 142 56 110 66 Z" fill="#3a322b"/>
+              <ellipse cx="110" cy="64" rx="26" ry="8" fill="#3a322b"/>
+              <path d="M132 60 C150 56 164 46 170 34" fill="none" stroke="#3a322b" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="170" cy="34" r="4" fill="#C2402E"/>
+              <path d="M170 34 L183 30 L170 40 Z" fill="#C2402E"/>
+              <path d="M90 68 L46 96" stroke="#3a322b" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M94 69 L52 100" stroke="#3a322b" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+          <svg class="crane c2" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
+            <g class="crane-g">
+              <path class="wing wing-back" d="M110 60 C80 25 35 22 4 48 C42 42 78 54 110 64 Z" fill="#3a322b"/>
+              <path class="wing wing-front" d="M110 62 C140 27 185 24 216 50 C178 44 142 56 110 66 Z" fill="#3a322b"/>
+              <ellipse cx="110" cy="64" rx="26" ry="8" fill="#3a322b"/>
+              <path d="M132 60 C150 56 164 46 170 34" fill="none" stroke="#3a322b" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="170" cy="34" r="4" fill="#C2402E"/>
+              <path d="M170 34 L183 30 L170 40 Z" fill="#C2402E"/>
+              <path d="M90 68 L46 96" stroke="#3a322b" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M94 69 L52 100" stroke="#3a322b" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+          <svg class="crane c3" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
+            <g class="crane-g">
+              <path class="wing wing-back" d="M110 60 C80 25 35 22 4 48 C42 42 78 54 110 64 Z" fill="#3a322b"/>
+              <path class="wing wing-front" d="M110 62 C140 27 185 24 216 50 C178 44 142 56 110 66 Z" fill="#3a322b"/>
+              <ellipse cx="110" cy="64" rx="26" ry="8" fill="#3a322b"/>
+              <path d="M132 60 C150 56 164 46 170 34" fill="none" stroke="#3a322b" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="170" cy="34" r="4" fill="#C2402E"/>
+              <path d="M170 34 L183 30 L170 40 Z" fill="#C2402E"/>
+              <path d="M90 68 L46 96" stroke="#3a322b" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M94 69 L52 100" stroke="#3a322b" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+        <div class="map-nodes" id="map-nodes"></div>
+      </div>
+
+      <div class="map-footer">
+        <p>点击节点进入关卡 · 通关后节点暖金点亮</p>
+      </div>
+    </section>
+
+    <main id="screen-root" style="display:none;"></main>
+
+    <div class="modal-backdrop" id="fact-modal">
+      <div class="modal-card">
+        <div class="modal-title">史实对照 <span class="grade-tag" id="modal-grade">史实</span></div>
+        <div class="fact-section">
+          <div class="fact-label">历史实际</div>
+          <p class="fact-text" id="modal-fact"></p>
+        </div>
+        <div class="fact-section">
+          <div class="fact-label">文献出处</div>
+          <p class="fact-text" id="modal-source"></p>
+        </div>
+        <button class="btn btn-primary mt-2" id="modal-continue">继续</button>
+      </div>
+    </div>
+
+    <div class="demo-panel hidden" id="demo-panel">
+      <label>演示模式</label>
+      <select id="demo-level"></select>
+      <select id="demo-screen"></select>
+      <button class="btn btn-secondary" id="demo-jump">跳转</button>
+      <button class="btn btn-red mt-1" id="demo-reset">清空进度</button>
+    </div>
+
+    <div class="wuyu-stage" id="wuyu-stage" style="display:none;">
+      <div class="wuyu-bubble" id="wuyu-bubble"></div>
+      <div class="wuyu-wrap" id="wuyu-wrap">
+        <img class="wuyu-img" id="wuyu-img" src="assets/wuyu/wuyu_default.png" alt="无隅" />
+        <span class="wuyu-ask" id="wuyu-ask">问</span>
+      </div>
+    </div>
+
+    <div class="companion-controls" id="companion-controls">
+      <button class="companion-btn" id="music-toggle" type="button" aria-label="仙乐开关">乐·开</button>
+    </div>
+  </div>
+
+  <canvas id="share-canvas" width="1080" height="1920"></canvas>
+
+  <script src="data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
