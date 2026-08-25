@@ -1,0 +1,12 @@
+{
+  "name": "shanhai-wuyu-ai",
+  "version": "1.0.0",
+  "description": "山海问道 · 无隅《道德经》知识问答后端（DeepSeek + 本地向量检索，零依赖）",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
